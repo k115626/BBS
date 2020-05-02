@@ -18,3 +18,6 @@ DB_URL = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(DB_USERNAME, DB_PASSWORD,
 
 SQLALCHEMY_DATABASE_URI = DB_URL
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+SECRET_KEY = 'sdfg12GJK.okj&*('
+
+CMS_USER_ID = 'cms_asgadfhdfdsh'

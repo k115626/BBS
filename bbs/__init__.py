@@ -9,7 +9,7 @@ from apps.front import bp as front_bp
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=config.STATIC_FOLDER, template_folder=config.TEMPLATES_FOLDER)
 
     app.config.from_object(config)
 

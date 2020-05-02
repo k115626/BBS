@@ -1,5 +1,11 @@
 
+import os
+
 DEBUG = True
+
+BASE_DIR = os.path.dirname((os.path.dirname(os.path.abspath(__file__))))
+TEMPLATES_FOLDER = os.path.join(BASE_DIR, 'templates')
+STATIC_FOLDER = os.path.join(BASE_DIR, 'static')
 
 DB_USERNAME = 'root'
 DB_PASSWORD = '123456'

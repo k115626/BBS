@@ -12,9 +12,9 @@ from flask import jsonify
 from flask import g
 from flask_mail import Message
 
-from apps.cms.models import CMSUser
+from apps.cms.models import CMSUser, CMSPersmission
 from apps.cms.forms import LoginForm, ResetPwdForm, ResetEmailForm
-from apps.cms.decorators import login_required
+from apps.cms.decorators import login_required, premission_required
 
 from bbs.exts import db
 from bbs.exts import mail
@@ -128,6 +128,48 @@ def login():
         else:
             message = form.errors.popitem()[1][0]
             return render_template('cms/cms_login.html', message=message)
+
+
+@bp.route('/posts/')
+@login_required
+@premission_required(CMSPersmission.POSTER)
+def posts():
+    return render_template('cms/cms_posts.html')
+
+
+@bp.route('/comments/')
+@login_required
+@premission_required(CMSPersmission.COMMENTER)
+def comments():
+    return render_template('cms/cms_comments.html')
+
+
+@bp.route('/boards/')
+@login_required
+@premission_required(CMSPersmission.BOARDER)
+def boards():
+    return render_template('cms/cms_boards.html')
+
+
+@bp.route('/fusers/')
+@login_required
+@premission_required(CMSPersmission.FRONTUSER)
+def fusers():
+    return render_template('cms/cms_fusers.html')
+
+
+@bp.route('/cusers/')
+@login_required
+@premission_required(CMSPersmission.CMSUSER)
+def cusers():
+    return render_template('cms/cms_cusers.html')
+
+
+@bp.route('/croles/')
+@login_required
+@premission_required(CMSPersmission.ALL_PERMISSION)
+def croles():
+    return render_template('cms/cms_croles.html')
 
 
 bp.add_url_rule('/resetpwd/', view_func=ResetPwdView.as_view('resetpwd'))

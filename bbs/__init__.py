@@ -14,6 +14,8 @@ def create_app():
     app = Flask(__name__, static_folder=config.STATIC_FOLDER, template_folder=config.TEMPLATES_FOLDER)
 
     app.config.from_object(config)
+    
+    exts.init_ext(app)
 
     app.register_blueprint(cms_bp)
     app.register_blueprint(common_bp)
@@ -21,7 +23,7 @@ def create_app():
 
     CSRFProtect(app)
 
-    exts.init_ext(app)
+    
 
     return app
 

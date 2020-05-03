@@ -1,6 +1,7 @@
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 
+
 from bbs import create_app
 
 from apps.cms import models as cms_models

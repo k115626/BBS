@@ -21,3 +21,14 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = 'sdfg12GJK.okj&*('
 
 CMS_USER_ID = 'cms_asgadfhdfdsh'
+
+# 发送者邮箱的服务配置
+MAIL_SERVER = 'smtp.163.com'
+MAIL_PORT = 465
+# MAIL_USE_TLS = True
+MAIL_USE_SSL = True
+MAIL_USERNAME = 'chai_jk@163.com'
+MAIL_PASSWORD = 'LRYSHPXGQSWCDJMF'
+MAIL_DEFAULT_SENDER = 'chai_jk@163.com'
+MAIL_DEBUG = False
+

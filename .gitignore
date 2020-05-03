@@ -1,6 +1,10 @@
 # Byte-compiled / optimized / DLL files
 migrations/
 .vscode/
+.DS_Store/
+.DS_Store
+dump.rdb
+
 
 __pycache__/
 *.py[cod]

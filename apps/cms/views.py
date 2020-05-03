@@ -1,3 +1,6 @@
+import string
+import random
+
 from flask import Blueprint
 from flask import session
 from flask import redirect
@@ -7,13 +10,18 @@ from flask import request
 from flask import views
 from flask import jsonify
 from flask import g
+from flask_mail import Message
 
 from apps.cms.models import CMSUser
-from apps.cms.forms import LoginForm, ResetPwdForm
+from apps.cms.forms import LoginForm, ResetPwdForm, ResetEmailForm
 from apps.cms.decorators import login_required
 
 from bbs.exts import db
+from bbs.exts import mail
 from bbs.config import CMS_USER_ID
+
+from utils import restful
+from utils import bbscache
 
 
 bp = Blueprint('cms', __name__, url_prefix='/cms/')
@@ -55,24 +63,48 @@ class ResetPwdView(views.MethodView):
             if user.check_password(oldpwd):
                 user.password = newpwd
                 db.session.commit()
-                data = {
-                    'code': 0,
-                    'message': 'OK',
-                }
-                return jsonify(data)
+                return restful.restful_success()
             else:
-                data = {
-                    'code': 1,
-                    'message': '密码错误',
-                }
-                return jsonify(data)
+                return restful.restful_parameserror('旧密码错误')
         else:
-            message = form.get_error()
-            data = {
-                'code': 2,
-                'message': message
-            }
-            return jsonify(data)
+            return restful.restful_parameserror(form.get_error())
+
+
+@bp.route('/email_captcha/')
+def email_captcha():
+    email = request.args.get('email')
+    if not email:
+        return restful.restful_parameserror('请传递邮箱参数')
+    source = list(string.ascii_letters)
+    source.extend([str(x) for x in range(10)])
+    captcha = ''.join(random.sample(source, 6))
+    
+    title = 'BBS 邮箱验证码'
+    content = '您的验证码是 %s' % captcha
+    message = Message(subject=title, recipients=[email], body=content)
+    try:
+        bbscache.set(email, captcha)
+        mail.send(message)
+        return restful.restful_success()
+    except:
+        return restful.restful_servererror('发送邮件服务错误')
+    
+
+class ResetEmailViews(views.MethodView):
+
+    decorators = [login_required]  # 指定装饰器验证是否登陆用户
+
+    def get(self):
+        return render_template('cms/cms_resetemail.html')
+
+    def post(self):
+        form = ResetEmailForm(request.form)
+        if form.validate():
+            g.cms_user.email = form.email.data
+            db.session.commit()
+            return restful.restful_success()
+        else:
+            return restful.restful_parameserror(form.get_error())
 
 
 @bp.route('/login/', methods=['POST', 'GET'])
@@ -99,3 +131,4 @@ def login():
 
 
 bp.add_url_rule('/resetpwd/', view_func=ResetPwdView.as_view('resetpwd'))
+bp.add_url_rule('/resetemail/', view_func=ResetEmailViews.as_view('resetemail'))

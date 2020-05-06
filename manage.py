@@ -4,11 +4,10 @@ from flask_script import Manager
 from bbs import create_app
 from bbs.exts import db
 
-from apps.cms import models as cms_models
 from apps.cms.models import CMSUser
 from apps.cms.models import CMSRole
 from apps.cms.models import CMSPersmission
-
+from apps.front.models import FrontUser
 
 app = create_app()
 
@@ -25,6 +24,16 @@ def create_cms_user(username, password, email):
     db.session.add(user)
     db.session.commit()
     print('CMS 添加用户成功')
+
+
+@manager.option('-t', '--telephone', dest='telephone')
+@manager.option('-u', '--username', dest='username')
+@manager.option('-p', '--password', dest='password')
+def create_front_user(telephone, username, password):
+    user = FrontUser(telephone=telephone, username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+    print('Front 添加用户成功')
 
 
 @manager.command

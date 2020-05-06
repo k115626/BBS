@@ -8,7 +8,6 @@ from flask import url_for
 from flask import render_template
 from flask import request
 from flask import views
-from flask import jsonify
 from flask import g
 from flask_mail import Message
 

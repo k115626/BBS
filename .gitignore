@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 migrations/
+.idea
 .vscode/
 .DS_Store/
 .DS_Store

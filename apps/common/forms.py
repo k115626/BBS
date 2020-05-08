@@ -1,11 +1,11 @@
 from hashlib import md5
 
-from apps.forms import BaseFrom
+from apps.forms import BaseForm
 from wtforms import StringField
 from wtforms.validators import regexp, InputRequired
 
 
-class SMSCaptchaForm(BaseFrom):
+class SMSCaptchaForm(BaseForm):
     salt = 'stsdh@*567VGH%^&HJM'
     telephone = StringField(validators=[regexp(r'^1[345789]\d{9}$')])
     timestamp = StringField(validators=[regexp(r'\d{13}')])

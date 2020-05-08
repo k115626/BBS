@@ -1,22 +1,25 @@
-from redis import Redis
 import pickle
+from redis import Redis as _Redis
+from bbs.config import REDIS
 
 
-cache = Redis(host='127.0.0.1', port=6379)
+class Redis(_Redis):
+
+    def get(self, name):
+        pickle_value = super().get(name)
+        if pickle_value is None:
+            return None
+        else:
+            try:
+                value = pickle.loads(pickle_value)
+            except pickle.UnpicklingError:
+                return pickle_value
+            else:
+                return value
+
+    def set(self, name, value, ex=60, px=None, nx=False, xx=False, keepttl=False):
+        pickle_value = pickle.dumps(value, pickle.HIGHEST_PROTOCOL)
+        return super().set(name, pickle_value, ex, px, nx, xx, keepttl)
 
 
-def set(key, val, timeout=60):
-    val = pickle.dumps(val)
-    return cache.setex(key, timeout, val)
-
-
-def get(key):
-    val = cache.get(key)
-    if val:
-        return pickle.loads(val)
-    else:
-        return None
-
-
-def delete(key):
-    return cache.delete(key)
+rds = Redis(**REDIS)

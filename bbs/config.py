@@ -20,6 +20,15 @@ SECRET_KEY = 'sdfg12GJK.okj&*('
 
 CMS_USER_ID = 'cms_asgadfhdfdsh'
 
+
+# redis 配置
+REDIS = {
+    'host': '127.0.0.1',
+    'port': 6379,
+    'db': 1,
+}
+
+
 # 发送者邮箱的服务配置
 MAIL_SERVER = 'smtp.163.com'
 MAIL_PORT = 465

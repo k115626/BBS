@@ -19,6 +19,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = 'sdfg12GJK.okj&*('
 
 CMS_USER_ID = 'cms_asgadfhdfdsh'
+FRONT_USER_ID = 'front_sdfggfghgt'
 
 
 # redis 配置
